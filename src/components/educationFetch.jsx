@@ -1,39 +1,24 @@
-import React from 'react'
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
-class EducationFetch extends React.Component{
-  constructor(props){
-    super(props)
-    this.state = {
-      counter: 0
-    }
-  }
-  
-  increment(){
-    this.setState(state => ({
-      counter: state.counter + 1
-    }))
-  }
+const EducationFetch = () => {
+  const [counter, setCounter] = useState(0);
+  const [fetchData, setFetchData] = useState([]);
 
-  componentDidMount(){
-    console.log('is mounted')
-  }
+  useEffect(async () => {
+    const response = await axios.get(
+      'https://jsonplaceholder.typicode.com/todos/'
+    );
+    setFetchData(...fetchData, response.data);
+  }, []);
 
-  componentDidUpdate(){
-    console.log('update state')
-  }
-
-  componentWillUnmount(){
-    console.log('is unmounted')
-  }
-
-  render(){
-    return(
-      <>
-        <h1>asdasd {this.state.counter}</h1>
-        <button className="btn btn-dark" onClick={() => this.increment()}>click</button>
-      </>
-    )
-  }
-}
+  return (
+    <>
+      {fetchData.map((element) => (
+        <div key={`key-${element.title}`}>{element.title}</div>
+      ))}
+    </>
+  );
+};
 
 export default EducationFetch;
